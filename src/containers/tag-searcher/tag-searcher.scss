@@ -1,0 +1,121 @@
+@import 'main';
+
+.tag-searcher {
+  border-top: $mobile-top-border-height solid $main-dark-color;
+  padding-top: $gutter;
+  position: relative;
+  > .material-icons {
+    background: #fff;
+    border-radius: 50%;
+    font-size: 40px;
+    padding: $gutter / 6;
+    position: absolute;
+    left: calc(50% - 25px);
+    top: 0;
+    transform: translateY(-($gutter - 5));
+    z-index: $app-icon-z-index;
+    &--loading {
+      animation: icon-spin-mb infinite 1s linear;
+    }
+  }
+  &__togglebtn {
+    @include abs-elem(0, 0, auto, auto);
+    color: $main-dark-color;
+    padding-right: $gutter / 2;
+    z-index: $toggle-btn-index;
+    > .material-icons {
+      font-size: 32px;
+    }
+    &__text {
+      @include abs-elem(auto, $gutter / 10, 0, auto);
+      background: $main-red-color;
+      border: 2px solid #FFF;
+      border-radius: 15px;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 13px;
+      padding: 1px $gutter / 5;
+    }
+  }
+  &__header {
+    text-align: center;
+  }
+  &__subtitle {
+    font-size: 14px;
+    font-weight: 500;
+    padding-top: $gutter / 3;
+  }
+  &__form {
+    @include flex-box(space-between, flex-end);
+    margin: $gutter / 2 auto 0;
+    width: 90%;
+    &__input {
+      border: none;
+      border-bottom: 1px solid $main-dark-color;
+      font-size: 12px;
+      padding: $gutter / 6 ;
+      width: 75%;
+      &:disabled {
+        background: transparent;
+      }
+      &::placeholder {
+        color: $main-grey-color;
+        font-style: italic;
+        text-transform: uppercase;
+      }
+    }
+    &__button {
+      background: $main-mid-blue-color;
+      font-size: 12px;
+      justify-content: center;
+      width: 20%;
+      &:disabled {
+        background: $main-light-blue-color;
+      }
+    }
+  }
+  @media screen and (min-width: $medium-mobile-breakpoint) {
+    border-top: $desktop-top-border-height solid $main-dark-color;
+    > .material-icons {
+      font-size: 50px;
+      left: calc(50% - #{$gutter});
+      transform: translateY(-$gutter);
+      &--loading {
+        animation: icon-spin-dt infinite 1s linear;
+      }
+    }
+    &__subtitle {
+      font-size: 16px;
+      > br {
+        display: none;
+      }
+    }
+    &__form {
+      width: 80%;
+      &__input {
+        font-size: 14px;
+      }
+      &__button {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+@keyframes icon-spin-mb {
+  from {
+    transform: translateY(-($gutter - 5)) rotate(0deg);
+  }
+  to {
+    transform: translateY(-($gutter - 5)) rotate(360deg);
+  }
+}
+@keyframes icon-spin-dt {
+  from {
+    transform: translateY(-$gutter) rotate(0deg);
+  }
+  to {
+    transform: translateY(-$gutter) rotate(360deg);
+  }
+}

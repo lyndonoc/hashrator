@@ -1,0 +1,39 @@
+// sizing values
+$gutter: 30px;
+$app-max-height: 700px;
+$app-max-width: 576px;
+$app-min-height: 440px;
+$app-min-width: 300px;
+$mobile-top-border-height: $gutter + ($gutter / 6);
+$desktop-top-border-height: $mobile-top-border-height + 10;
+
+// colours
+$main-dark-color: #182229;
+$main-dark-blue-color: #192950;
+$main-green-color: #1DCC96;
+$main-grey-color: #7e7e7e;
+$main-light-blue-color: #B6CDE5;
+$main-mid-blue-color: #4676E5;
+$main-red-color: #EC5252;
+
+// z-indices
+$navigator-z-index: 99;
+$selected-tags-z-index: 9995;
+$app-icon-z-index: 9996;
+$loader-z-index: 9997;
+$alert-z-index: 9998;
+$toggle-btn-index: 9999;
+
+// media query breakpoints
+$minimum-height-breakpoint: 459px;
+$medium-mobile-breakpoint: 576px;
+$large-mobile-breakpoint: 768px;
+$small-desktop-breakpoint: 992px;
+
+// toasts colours
+$toast-success-bg: #DBFFDB;
+$toast-success-border: #c3e6cb;
+$toast-success-text: #107010;
+$toast-warning-bg: #f8d7da;
+$toast-warning-border: #f5c6cb;
+$toast-warning-text: #721c24;

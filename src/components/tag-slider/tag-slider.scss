@@ -1,0 +1,59 @@
+@import 'main';
+
+.tag-slider {
+  @include abs-elem(0, 0, 0, 0);
+  @include flex-box(space-between, center);
+  animation: slideIn .3s;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  transition: all .3s;
+  width: 100%;
+  &__title {
+    font-size: 18px;
+    padding: $gutter / 3 0;
+  }
+  &__morebtn {
+    background: $main-dark-blue-color;
+    font-size: 12px;
+    margin: $gutter / 3 auto 0;
+    min-height: 30px;
+  }
+  &__left {
+    transform: translateX(-100%);
+  }
+  &__right {
+    transform: translateX(100%);
+  }
+  &__container {
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+  @media screen and (min-width: $medium-mobile-breakpoint) {
+    &__morebtn {
+      margin: $gutter / 2 auto 0;
+    }
+    &__title {
+      font-size: 20px;
+      padding: $gutter / 2 0;
+    }
+  }
+  @media screen and (min-width: $small-desktop-breakpoint) {
+    &__morebtn {
+      &:hover {
+        background: $main-mid-blue-color;
+      }
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

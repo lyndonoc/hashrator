@@ -1,0 +1,36 @@
+@import 'main';
+
+.toast {
+  @include flex-box(space-between, center);
+  font-size: 14px;
+  font-weight: 500;
+  padding: $gutter / 3;
+  > .material-icons {
+    cursor: pointer;
+    font-size: 18px;
+  }
+  &--success {
+    background: $toast-success-bg;
+    border: 1px solid $toast-success-border;
+    color: $toast-success-text
+  }
+  &--warning {
+    background: $toast-warning-bg;
+    border: 1px solid $toast-warning-border;
+    color: $toast-warning-text
+  }
+  &-enter {
+    transform: translateX(-100%);
+    &.toast-enter-active {
+      transform: translateX(0);
+      transition: all 150ms ease-in;
+    }
+  }
+  &-leave {
+    transform: translateX(0);
+    &.toast-leave-active {
+      transform: translateX(-100%);
+      transition: all 300ms ease-in;
+    }
+  }
+}

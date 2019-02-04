@@ -1,0 +1,39 @@
+@import 'main';
+
+#root {
+  @include flex-box(center, center);
+  height: 100%;
+}
+.app {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  &__container {
+    height: 100%;
+    margin: 0 auto;
+    max-height: $app-max-height;
+    max-width: $app-max-width;
+    min-height: 440px;
+    min-width: 300px;
+    padding: $gutter / 3;
+    width: 100%;
+  }
+  &__title {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+  }
+  @media screen and (min-width: $medium-mobile-breakpoint) {
+    &__title {
+      font-size: 26px;
+    }
+  }
+}
+@media screen and (max-height: $minimum-height-breakpoint) {
+  #root {
+    align-items: flex-start;
+  }
+}

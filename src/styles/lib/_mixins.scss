@@ -1,0 +1,24 @@
+@mixin rectanglify($px) {
+  height: $px;
+  width: $px;
+}
+
+@mixin flex-box($justify-type, $align-type: center) {
+  align-items: $align-type;
+  display: flex;
+  justify-content: $justify-type;
+}
+
+@mixin abs-elem($top-val, $right-val, $bottom-val, $left-val, $position: absolute) {
+  position: $position;
+  top: $top-val;
+  right: $right-val;
+  bottom: $bottom-val;
+  left: $left-val;
+}
+
+@mixin truncate() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
