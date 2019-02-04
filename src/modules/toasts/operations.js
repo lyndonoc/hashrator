@@ -1,6 +1,6 @@
 import { actions } from './actions';
 
-const addNewToast = (message, type = 'success', timeout = 1500) => (dispatch) => {
+const addNewToast = (message, type = 'success', timeout = 2000) => (dispatch) => {
   const id = String.fromCharCode(65 + Math.floor(Math.random() * 26)) + Date.now();
 
   dispatch(actions.addNewToast({

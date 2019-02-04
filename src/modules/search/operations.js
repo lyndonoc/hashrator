@@ -19,13 +19,13 @@ const searchForHashtag = (term) => (dispatch, getState) => {
 
   return getTopHashtags(term)
     .then((response) => {
-      dispatch(actions.setSearchResults({
-        isConsecutive: response.isConsecutive,
-        results: response.data,
-        term,
-      }));
 
       if (response.data.length) {
+        dispatch(actions.setSearchResults({
+          isConsecutive: response.isConsecutive,
+          results: response.data,
+          term,
+        }));
         dispatch(actions.changeSearchIndex(Object.keys(results).length));
       } else {
         dispatch(toastsOperations.addNewToast(
@@ -51,12 +51,12 @@ const searchForMoreHashtags = (term) => (dispatch, getState) => {
 
   return getMoreHashtags(term)
     .then((response) => {
-      dispatch(actions.setSearchResults({
-        isConsecutive: response.isConsecutive,
-        results: response.data,
-        term,
-      }));
       if (!response.data.length) {
+        dispatch(actions.setSearchResults({
+          isConsecutive: response.isConsecutive,
+          results: response.data,
+          term,
+        }));
         dispatch(toastsOperations.addNewToast(
           `Failed to find hashtags for ${term}.`,
           'warning'
