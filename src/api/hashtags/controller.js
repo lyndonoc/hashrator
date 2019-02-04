@@ -40,7 +40,7 @@ const getHashTags = async (req, res) => {
     const data = Array.from(new Set(parseHashTags(rawText)));
 
     return success(res, {
-      data,
+      data: data.filter((tag) => tag !== hashtag),
       isConsecutive: false,
     });
   } catch (err) {
@@ -85,7 +85,7 @@ const getMoreHashTags = async (req, res) => {
     const data = Array.from(new Set(parseHashTags(rawText)));
 
     return success(res, {
-      data,
+      data: data.filter((tag) => tag !== hashtag),
       isConsecutive: true,
     });
   } catch (err) {
