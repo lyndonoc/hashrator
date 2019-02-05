@@ -12,12 +12,12 @@
   &--success {
     background: $toast-success-bg;
     border: 1px solid $toast-success-border;
-    color: $toast-success-text
+    color: $toast-success-text;
   }
   &--warning {
     background: $toast-warning-bg;
     border: 1px solid $toast-warning-border;
-    color: $toast-warning-text
+    color: $toast-warning-text;
   }
   &-enter {
     transform: translateX(-100%);
