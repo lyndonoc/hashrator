@@ -11,6 +11,17 @@ const checkObjProps = (obj = {}, props = []) => {
   return target;
 };
 
+const mapObjToProps = (obj = {}, mappings = {}) => {
+  return Object.keys(mappings).reduce(
+    (acc, value) => ({
+      ...acc,
+      [value]: checkObjProps(obj, mappings[value]),
+    }),
+    {},
+  );
+};
+
 module.exports = {
   checkObjProps,
+  mapObjToProps,
 };

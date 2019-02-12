@@ -1,92 +1,77 @@
 const rp = require('request-promise');
 
-const { checkObjProps } = require('../../lib/check-obj-prop');
+const cacheClient = require('../../lib/cache');
+const config = require('../../config');
+const { checkObjProps, mapObjToProps } = require('../../lib/check-obj-prop');
 const { getHashTagPage } = require('../../lib/url');
 const { parseHashTags } = require('../../lib/hashtags');
-const { TAG_SEARCH_API: tagSearchApi } = require('../../config');
 const { success } = require('../../lib/responses');
 
 const getHashTags = async (req, res) => {
-  const { hashtag } = req.params;
+  const {
+    params: { hashtag },
+    query: { size, start, type = 'top' },
+  } = req;
 
-  if (!hashtag) {
+  if (!hashtag || !config.TAG_TYPES.hasOwnProperty(type.toUpperCase())) {
     return success(res, {
       data: [],
     });
   }
 
   try {
-    const hashtagUrl = getHashTagPage(hashtag);
-    const instaPage = await rp.get(hashtagUrl + '/?__a=1');
-    const edges = checkObjProps(
-      JSON.parse(instaPage),
-      tagSearchApi.topPayloadShape
-    );
+    const tagType = config.TAG_TYPES[type.toUpperCase()];
+    const cachedTags = await cacheClient.get(hashtag, tagType);
+    console.log(await cacheClient.get(hashtag));
 
-    const rawText = edges
-      ? edges
+    if (cachedTags) {
+      return success(res, {
+        data: JSON.parse(cachedTags),
+        isConsecutive: tagType === config.TAG_TYPES.MORE,
+      });
+    }
+
+    const hashtagUrl = getHashTagPage(hashtag);
+    const instaPage = await rp.get(hashtagUrl);
+    const tagsMap = mapObjToProps(JSON.parse(instaPage), {
+      [config.TAG_TYPES.TOP]: config.TAG_SEARCH_API.topPayloadShape,
+      [config.TAG_TYPES.MORE]: config.TAG_SEARCH_API.morePayloadShape,
+    });
+    const dataMap = Object.keys(tagsMap).reduce((acc, key) => {
+      const rawText = tagsMap[key]
         .map((edge) => {
-          const nodeEdge = checkObjProps(
-            edge,
-            tagSearchApi.nodeShape
-          );
-          return nodeEdge
-            ? nodeEdge[0] && nodeEdge[0].node && nodeEdge[0].node.text
+          const edgeText = checkObjProps(edge, config.TAG_SEARCH_API.nodeShape);
+          return edgeText
+            ? edgeText[0] && edgeText[0].node && edgeText[0].node.text
             : '';
         })
-        .join(' ')
-      : '';
+        .join(' ');
+      const parsedTags = Array.from(new Set(parseHashTags(rawText))).filter(
+        (tag) => tag !== `#${hashtag}`,
+      );
 
-    const data = Array.from(new Set(parseHashTags(rawText)));
+      if (parsedTags.length) {
+        cacheClient.set(
+          hashtag,
+          key,
+          JSON.stringify(parsedTags),
+          'EX',
+          config.REDIS.EXP,
+        );
+      }
 
-    return success(res, {
-      data: data.filter((tag) => tag !== `#${hashtag}`),
-      isConsecutive: false,
-    });
-  } catch (err) {
-    console.error(err);
-    return success(res, {
-      data: [],
-    });
-  }
-};
-
-const getMoreHashTags = async (req, res) => {
-  const { hashtag } = req.params;
-
-  if (!hashtag) {
-    return success(res, {
-      data: [],
-    });
-  }
-
-  try {
-    const hashtagUrl = getHashTagPage(hashtag);
-    const instaPage = await rp.get(hashtagUrl + '/?__a=1');
-    const edges = checkObjProps(
-      JSON.parse(instaPage),
-      tagSearchApi.morePayloadShape
-    );
-
-    const rawText = edges
-      ? edges
-        .map((edge) => {
-          const nodeEdge = checkObjProps(
-            edge,
-            tagSearchApi.nodeShape
-          );
-          return nodeEdge
-            ? nodeEdge[0] && nodeEdge[0].node && nodeEdge[0].node.text
-            : '';
-        })
-        .join(' ')
-      : '';
-
-    const data = Array.from(new Set(parseHashTags(rawText)));
+      return {
+        ...acc,
+        [key]: parsedTags,
+      };
+    }, {});
 
     return success(res, {
-      data: data.filter((tag) => tag !== hashtag),
-      isConsecutive: true,
+      data:
+        size && start
+          ? dataMap[tagType].slice(start, start + size)
+          : dataMap[tagType],
+      isConsecutive: tagType === config.TAG_TYPES.MORE,
     });
   } catch (err) {
     console.error(err);
@@ -98,5 +83,4 @@ const getMoreHashTags = async (req, res) => {
 
 module.exports = {
   getHashTags,
-  getMoreHashTags,
 };

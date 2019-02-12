@@ -16,7 +16,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['dependencies', 'import', 'node', 'promise'],
+  plugins: ['dependencies', 'import', 'node', 'prettier', 'promise'],
   rules: {
     'dependencies/case-sensitive': 1,
     'dependencies/no-cycles': 1,
@@ -35,6 +35,19 @@ module.exports = {
     'import/newline-after-import': [2],
     'linebreak-style': ['error', 'unix'],
     'no-console': 'off',
+    'prettier/prettier': [
+      'error',
+      {
+        arrowParens: 'always',
+        bracketSpacing: true,
+        jsxBracketSameLine: false,
+        parser: 'babel',
+        printWidth: 80,
+        semi: true,
+        singleQuote: true,
+        trailingComma: 'all',
+      },
+    ],
     'promise/no-callback-in-promise': [
       'error',
       {

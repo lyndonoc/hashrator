@@ -13,8 +13,3 @@ const parseHashTags = (inputText) => {
 module.exports = {
   parseHashTags,
 };
-
-
-module.exports = {
-  parseHashTags,
-};

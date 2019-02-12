@@ -1,9 +1,4 @@
-const {
-  addColors,
-  createLogger,
-  format,
-  transports
-} = require('winston');
+const { addColors, createLogger, format, transports } = require('winston');
 
 const config = require('../config');
 

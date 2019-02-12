@@ -11,9 +11,11 @@ module.exports = (apiRoot, routes) => {
 
   app.use(cors());
   app.use(compression());
-  app.use(morgan('combined', {
-    stream: winston.stream
-  }));
+  app.use(
+    morgan('combined', {
+      stream: winston.stream,
+    }),
+  );
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
