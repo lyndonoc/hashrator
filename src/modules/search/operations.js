@@ -1,5 +1,5 @@
 import { actions } from './actions';
-import { getMoreHashtags, getTopHashtags } from '../../services/hashtags';
+import { getHashTags } from '../../services/hashtags';
 import { toastsOperations } from '../toasts';
 
 const changeSearchIndex = (nextIndex) => (dispatch) => {
@@ -10,53 +10,33 @@ const removeFromSelected = (tag) => (dispatch) => {
   dispatch(actions.removeFromSelected(tag));
 };
 
-const searchForHashtag = (term) => (dispatch, getState) => {
+const searchForHashtags = (term, options = {}) => (dispatch, getState) => {
   const {
-    results
+    results,
   } = getState().search;
+  const _options = {
+    ...options,
+  };
+
+  if (results.hasOwnProperty(term) && options.type) {
+    const pageIndex = Object.keys(results).findIndex((result) => result === term);
+    return dispatch(actions.changeSearchIndex(pageIndex));
+  }
 
   toggleIsSearching(true)(dispatch, getState);
 
-  return getTopHashtags(term)
+  return getHashTags(term, _options)
     .then((response) => {
-
       if (response.data.length) {
         dispatch(actions.setSearchResults({
           isConsecutive: response.isConsecutive,
           results: response.data,
           term,
         }));
-        dispatch(actions.changeSearchIndex(Object.keys(results).length));
+        if (!response.isConsecutive) {
+          dispatch(actions.changeSearchIndex(Object.keys(results).length));
+        }
       } else {
-        dispatch(toastsOperations.addNewToast(
-          `Failed to find hashtags for ${term}.`,
-          'warning'
-        ));
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      dispatch(toastsOperations.addNewToast(
-        `Failed to find hashtags for ${term}.`,
-        'warning'
-      ));
-    })
-    .finally(() => {
-      toggleIsSearching(false)(dispatch, getState);
-    });
-};
-
-const searchForMoreHashtags = (term) => (dispatch, getState) => {
-  toggleIsSearching(true)(dispatch, getState);
-
-  return getMoreHashtags(term)
-    .then((response) => {
-      if (!response.data.length) {
-        dispatch(actions.setSearchResults({
-          isConsecutive: response.isConsecutive,
-          results: response.data,
-          term,
-        }));
         dispatch(toastsOperations.addNewToast(
           `Failed to find hashtags for ${term}.`,
           'warning'
@@ -89,8 +69,7 @@ const toggleIsSearching = (status) => (dispatch, getState) => {
 export default {
   changeSearchIndex,
   removeFromSelected,
-  searchForHashtag,
-  searchForMoreHashtags,
+  searchForHashtags,
   selectAHashtag,
   toggleIsSearching,
 };

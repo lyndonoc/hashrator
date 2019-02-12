@@ -5,6 +5,7 @@ const initialState = {
   isLoading: false,
   results: {},
   selected: [],
+  size: 50,
 };
 
 const searchReducer = (state = initialState, action) => {
@@ -45,7 +46,7 @@ const searchReducer = (state = initialState, action) => {
                 ...state.results[action.payload.term].results,
                 ...action.payload.results,
               ]))
-              : action.payload.results
+              : action.payload.results,
           }
         }
       };

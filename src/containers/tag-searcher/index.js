@@ -93,7 +93,7 @@ class TagSearcherContainer extends Component {
   static propTypes = {
     isLoading: PropTypes.bool,
     isSelectedOpen: PropTypes.bool,
-    searchForHashtag: PropTypes.func.isRequired,
+    searchForHashtags: PropTypes.func.isRequired,
     selectedTags: PropTypes.arrayOf(PropTypes.string),
     toggleSelectedPage: PropTypes.func.isRequired,
   };
@@ -123,7 +123,7 @@ class TagSearcherContainer extends Component {
 
     if (this.state.searchTerm && !this.props.isLoading) {
       const term = this.state.searchTerm.trim();
-      this.props.searchForHashtag(term);
+      this.props.searchForHashtags(term);
       this.setState({
         searchTerm: ''
       });

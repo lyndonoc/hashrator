@@ -92,8 +92,7 @@ class TagExplorerContainer extends Component {
     isMobile: PropTypes.bool,
     removeFromSelected: PropTypes.func.isRequired,
     results: PropTypes.object,
-    searchForHashtag: PropTypes.func.isRequired,
-    searchForMoreHashtags: PropTypes.func.isRequired,
+    searchForHashtags: PropTypes.func.isRequired,
     selectAHashtag: PropTypes.func.isRequired,
     selectedTags: PropTypes.arrayOf(PropTypes.string),
   };
@@ -106,8 +105,14 @@ class TagExplorerContainer extends Component {
     selectedTags: [],
   };
 
+  handleLoadMore(tag) {
+    this.props.searchForHashtags(tag, {
+      type: 'more'
+    });
+  }
+
   handleTagClick(tag) {
-    this.props.searchForHashtag(tag.replace('#', ''));
+    this.props.searchForHashtags(tag.replace('#', ''));
   }
 
   handleTagSelect(tag, isSelected) {
@@ -128,7 +133,7 @@ class TagExplorerContainer extends Component {
         <Loader isLoading={this.props.isLoading}/>
         <TagExplorer
           currentIndex={this.props.currentIndex}
-          onLoadMore={this.props.searchForMoreHashtags}
+          onLoadMore={this.handleLoadMore.bind(this)}
           onNavigate={this.props.changeSearchIndex}
           onTagClick={this.handleTagClick.bind(this)}
           onTagSelect={this.handleTagSelect.bind(this)}

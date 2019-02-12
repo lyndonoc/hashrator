@@ -1,8 +1,0 @@
-dist
-node_modules
-build
-aws-dist
-config
-public
-scripts
-serviceWorker.js

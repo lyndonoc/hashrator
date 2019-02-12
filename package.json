@@ -63,7 +63,8 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "lint": "npm-run-all lint:js lint:scss",
-    "lint:js": "eslint .",
+    "lint:fix": "npm-run-all lint:js:fix lint:scss:fix",
+    "lint:js": "eslint src",
     "lint:js:fix": "eslint . --fix",
     "lint:scss": "sass-lint -c .sass-lint.yml -v -q",
     "lint:scss:fix": "sass-lint-auto-fix -c .sass-lint.yml"
