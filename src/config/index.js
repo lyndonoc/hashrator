@@ -14,6 +14,7 @@ const config = {
       HOST: envVar.REDIS_HOST,
     },
     TAG_TYPES: {
+      SIZE: 'SIZE',
       MORE: 'MORE',
       TOP: 'TOP',
     },
