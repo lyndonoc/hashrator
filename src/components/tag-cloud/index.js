@@ -6,7 +6,9 @@ import TransitionGroup from 'react-addons-css-transition-group';
 import './tag-cloud.scss';
 
 const TagCloud = ({
+  hoverIndex,
   onClick,
+  onMouseOver,
   onSelect,
   selectedTags,
   tags,
@@ -19,16 +21,18 @@ const TagCloud = ({
         transitionEnterTimeout={300}
         transitionLeaveTimeout={300}
       >
-        {tags.map((tag) => {
+        {tags.map((tag, index) => {
           const isSelected = selectedTags.includes(tag);
           const classname = classnames('tag-cloud__item', {
-            'tag-cloud__item--selected': isSelected
+            'tag-cloud__item--selected': isSelected,
+            'tag-cloud__item--hovered': hoverIndex,
           });
 
           return (
             <span
               className={classname}
               key={tag}
+              onMouseOver={onMouseOver && onMouseOver.bind(null, index)}
             >
               <i
                 className="material-icons"
@@ -51,14 +55,18 @@ const TagCloud = ({
 };
 
 TagCloud.propTypes = {
+  hoverIndex: PropTypes.number,
   onClick: PropTypes.func,
+  onMouseOver: PropTypes.func,
   onSelect: PropTypes.func,
   selectedTags: PropTypes.arrayOf(PropTypes.string),
   tags: PropTypes.arrayOf(PropTypes.string),
 };
 
 TagCloud.default = {
+  hoverIndex: null,
   onClick: () => {},
+  onMouseOver: () => {},
   onSelect: () => {},
   selectedTags: [],
   tags: [],

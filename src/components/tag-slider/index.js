@@ -7,7 +7,9 @@ import './tag-slider.scss';
 const TagSlider = ({
   ButtonComponent,
   currentIndex,
+  hoverIndex,
   onLoadMore,
+  onMouseOver,
   onTagClick,
   onTagSelect,
   selectedTags,
@@ -36,7 +38,9 @@ const TagSlider = ({
             )}
             <TagCloudComponent
               key={index}
+              hoverIndex={hoverIndex}
               onClick={onTagClick}
+              onMouseOver={onMouseOver}
               onSelect={onTagSelect}
               selectedTags={selectedTags}
               tags={tagsMap[tag].results}
@@ -58,7 +62,9 @@ const TagSlider = ({
 TagSlider.propTypes = {
   ButtonComponent: PropTypes.func,
   currentIndex: PropTypes.number,
+  hoverIndex: PropTypes.number,
   onLoadMore: PropTypes.func,
+  onMouseOver: PropTypes.func,
   onTagClick: PropTypes.func,
   onTagSelect: PropTypes.func,
   selectedTags: PropTypes.arrayOf(PropTypes.string),
@@ -71,7 +77,9 @@ TagSlider.propTypes = {
 TagSlider.defaultProps = {
   ButtonComponent: () => {},
   currentIndex: 0,
+  hoverIndex: null,
   onLoadMore: () => {},
+  onMouseOver: () => {},
   onTagClick: () => {},
   onTagSelect: () => {},
   selectedTags: [],

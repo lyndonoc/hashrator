@@ -8,15 +8,18 @@ import Button from '../../components/button';
 import Loader from '../../components/loader';
 import TagCloud from '../../components/tag-cloud';
 import TagSlider from '../../components/tag-slider';
+import { layoutOperations } from '../../modules/layout';
 import { searchOperations } from '../../modules/search';
 
 import './tag-explorer.scss';
 
 const TagExplorer = ({
   currentIndex,
+  hoverIndex,
   selectedTags,
   tagsMap,
   onLoadMore,
+  onMouseOver,
   onNavigate,
   onTagClick,
   onTagSelect,
@@ -41,7 +44,9 @@ const TagExplorer = ({
         <TagSlider
           ButtonComponent={Button}
           currentIndex={currentIndex}
+          hoverIndex={hoverIndex}
           onLoadMore={onLoadMore}
+          onMouseOver={onMouseOver}
           onTagClick={onTagClick}
           onTagSelect={onTagSelect}
           selectedTags={selectedTags}
@@ -63,7 +68,9 @@ const TagExplorer = ({
 
 TagExplorer.propTypes = {
   currentIndex: PropTypes.number,
+  hoverIndex: PropTypes.number,
   onLoadMore: PropTypes.func,
+  onMouseOver: PropTypes.func,
   onNavigate: PropTypes.func,
   onTagClick: PropTypes.func,
   onTagSelect: PropTypes.func,
@@ -75,7 +82,9 @@ TagExplorer.propTypes = {
 
 TagExplorer.defaultProps = {
   currentIndex: 0,
+  hoverIndex: null,
   onLoadMore: () => {},
+  onMouseOver: () => {},
   onNavigate: () => {},
   onTagClick: () => {},
   onTagSelect: () => {},
@@ -88,19 +97,24 @@ class TagExplorerContainer extends Component {
   static propTypes = {
     changeSearchIndex: PropTypes.func.isRequired,
     currentIndex: PropTypes.number,
+    hoverIndex: PropTypes.number,
     isLoading: PropTypes.bool,
     isMobile: PropTypes.bool,
+    isSelectingMultiple: PropTypes.bool,
     removeFromSelected: PropTypes.func.isRequired,
     results: PropTypes.object,
     searchForHashtags: PropTypes.func.isRequired,
     selectAHashtag: PropTypes.func.isRequired,
     selectedTags: PropTypes.arrayOf(PropTypes.string),
+    updateHoverIndex: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     currentIndex: 0,
+    hoverIndex: null,
     isLoading: false,
     isMobile: false,
+    isSelectingMultiple: false,
     results: {},
     selectedTags: [],
   };
@@ -123,17 +137,27 @@ class TagExplorerContainer extends Component {
     ](tag);
   }
 
+  updateHoverIndex(index) {
+    if (this.props.selectedTags.length > 0 && this.props.isSelectingMultiple) {
+      this.props.updateHoverIndex(index);
+    }
+  }
+
   render() {
     const containerClassName = classnames('tag-explorer__container', {
       'tag-explorer__container--mobile': this.props.isMobile,
     });
+    const isSelectingMultiple = this.props.selectedTags.length > 0 && this.props.isSelectingMultiple;
 
     return (
       <div className={containerClassName}>
         <Loader isLoading={this.props.isLoading}/>
         <TagExplorer
           currentIndex={this.props.currentIndex}
+          isSelectingMultiple={isSelectingMultiple}
+          hoverIndex={this.props.hoverIndex}
           onLoadMore={this.handleLoadMore.bind(this)}
+          onMouseOver={this.updateHoverIndex.bind(this)}
           onNavigate={this.props.changeSearchIndex}
           onTagClick={this.handleTagClick.bind(this)}
           onTagSelect={this.handleTagSelect.bind(this)}
@@ -147,13 +171,16 @@ class TagExplorerContainer extends Component {
 
 const mapStateToProps = (state) => ({
   currentIndex: state.search.currentIndex,
+  hoverIndex: state.layout.hoverIndex,
   isLoading: state.search.isLoading,
   isMobile: state.layout.isMobile,
+  isSelectingMultiple: state.layout.isSelectingMultiple,
   results: state.search.results,
   selectedTags: state.search.selected,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
+  ...layoutOperations,
   ...searchOperations,
 }, dispatch);
 
