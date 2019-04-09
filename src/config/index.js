@@ -21,9 +21,9 @@ const config = {
     LOG_LEVEL: envVar.LOG_LEVEL || 'debug',
     NODE_ENV: envVar.NODE_ENV || 'development',
     TAG_SEARCH_API: {
-      protocol: envVar.TAG_SEARCH_API_PROTOCOL,
-      hostname: envVar.TAG_SEARCH_API_HOSTNAME,
-      pathname: envVar.TAG_SEARCH_API_PATHNAME,
+      protocol: envVar.TAG_SEARCH_API_PROTOCOL || 'https',
+      hostname: envVar.TAG_SEARCH_API_HOSTNAME || 'www.instagram.com',
+      pathname: envVar.TAG_SEARCH_API_PATHNAME || '/explore/tags',
       topPayloadShape:
         envVar.TAG_SEARCH_TOP_PAYLOAD_SHAPE &&
         envVar.TAG_SEARCH_TOP_PAYLOAD_SHAPE.split(','),
