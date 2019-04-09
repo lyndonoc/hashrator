@@ -61,6 +61,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "deploy": "aws s3 sync ./build s3://hashrator --acl public-read --profile personal",
     "test": "node scripts/test.js",
     "lint": "npm-run-all lint:js lint:scss",
     "lint:fix": "npm-run-all lint:js:fix lint:scss:fix",
