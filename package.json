@@ -1,0 +1,24 @@
+{
+  "name": "hashrator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "concurrently 'cd server && rm -rf node_modules && npm i' 'cd client && rm -rf node_modules && npm i'",
+    "start": "concurrently 'cd server && npm run watch' 'cd client && npm start'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lyndonoc/hashrator.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lyndonoc/hashrator/issues"
+  },
+  "homepage": "https://github.com/lyndonoc/hashrator#readme",
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  }
+}
