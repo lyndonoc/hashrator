@@ -1,23 +1,12 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import { render } from 'react-dom';
+const ApiRoute = require('./api');
+const app = require('./app');
+const logger = require('./lib/logger');
+const { API_ROUTE: apiRoute, PORT: appPort } = require('./config');
 
-import AppContainer from './containers/app';
-import rootReducer from './modules';
-import { createNewStore } from './store';
+const App = app(apiRoute, ApiRoute);
 
-import * as serviceWorker from './serviceWorker';
+App.listen(appPort, () => {
+  logger.info(`Listening on ${appPort}`);
+});
 
-import './index.scss';
-
-render(
-  <Provider store={createNewStore(rootReducer)}>
-    <AppContainer />
-  </Provider>,
-  document.getElementById('root')
-);
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+module.exports = App;
