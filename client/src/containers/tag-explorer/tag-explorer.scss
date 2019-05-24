@@ -4,10 +4,6 @@
   @include flex-box(space-between, stretch);
   height: 100%;
   overflow: hidden;
-  .tag-cloud__container {
-    margin-right: -15px;
-    padding-right: 15px;
-  }
   &__container {
     flex-grow: 2;
     height: 100%;
@@ -66,8 +62,6 @@
       }
     }
     .tag-cloud__container {
-      margin-right: -30px;
-      padding-right: 30px;
       width: 100%;
     }
   }

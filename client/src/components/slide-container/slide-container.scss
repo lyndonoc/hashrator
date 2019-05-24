@@ -1,0 +1,19 @@
+@import 'main';
+
+.slide-container {
+  @include abs-elem(0, auto, 0, 0);
+  @include flex-box(center, flex-end);
+  overflow: hidden;
+  width: 100%;
+  transition: all .3s;
+  transform: translatey(100%);
+  z-index: $selected-tags-z-index;
+  &--visible {
+    transform: translate(0);
+  }
+  &--mobile {
+    .tag-cloud__container {
+      margin-right: 0;
+    }
+  }
+};

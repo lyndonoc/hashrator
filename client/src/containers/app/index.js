@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import HistoryViewerContainer from '../history-viewer';
 import SelectedTags from '../selected-tags';
 import TagExplorerContainer from '../tag-explorer';
 import TagSearcherContainer from '../tag-searcher';
@@ -45,6 +46,7 @@ class AppContainer extends Component {
         <div className="app">
           <TagSearcherContainer/>
           <TagExplorerContainer/>
+          <HistoryViewerContainer/>
           <SelectedTags/>
           <ToastsContainer/>
         </div>

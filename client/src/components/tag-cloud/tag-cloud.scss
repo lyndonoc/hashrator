@@ -3,10 +3,9 @@
 .tag-cloud {
   @include flex-box(center);
   flex-wrap: wrap;
+  padding-right: 8px;
   &__container {
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: scroll;
   }
   &__item {
     @include flex-box(center);

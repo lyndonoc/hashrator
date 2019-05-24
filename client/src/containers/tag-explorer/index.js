@@ -119,6 +119,27 @@ class TagExplorerContainer extends Component {
     selectedTags: [],
   };
 
+  constructor(props) {
+    super(props);
+
+    this.handleLoadMore = this.handleLoadMore.bind(this);
+    this.handleTagClick = this.handleTagClick.bind(this);
+    this.handleTagSelect = this.handleTagSelect.bind(this);
+    this.updateHoverIndex = this.updateHoverIndex.bind(this);
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const {
+      isSelectingMultiple,
+      selectedTags,
+    } = props;
+
+    return {
+      ...state,
+      isSelectingMultiple: selectedTags.length > 0 && isSelectingMultiple,
+    };
+  }
+
   handleLoadMore(tag) {
     this.props.searchForHashtags(tag, {
       type: 'more'
@@ -138,7 +159,7 @@ class TagExplorerContainer extends Component {
   }
 
   updateHoverIndex(index) {
-    if (this.props.selectedTags.length > 0 && this.props.isSelectingMultiple) {
+    if (this.state.isSelectingMultiple) {
       this.props.updateHoverIndex(index);
     }
   }
@@ -147,20 +168,19 @@ class TagExplorerContainer extends Component {
     const containerClassName = classnames('tag-explorer__container', {
       'tag-explorer__container--mobile': this.props.isMobile,
     });
-    const isSelectingMultiple = this.props.selectedTags.length > 0 && this.props.isSelectingMultiple;
 
     return (
       <div className={containerClassName}>
         <Loader isLoading={this.props.isLoading}/>
         <TagExplorer
           currentIndex={this.props.currentIndex}
-          isSelectingMultiple={isSelectingMultiple}
+          isSelectingMultiple={this.state.isSelectingMultiple}
           hoverIndex={this.props.hoverIndex}
-          onLoadMore={this.handleLoadMore.bind(this)}
-          onMouseOver={this.updateHoverIndex.bind(this)}
+          onLoadMore={this.handleLoadMore}
+          onMouseOver={this.updateHoverIndex}
           onNavigate={this.props.changeSearchIndex}
-          onTagClick={this.handleTagClick.bind(this)}
-          onTagSelect={this.handleTagSelect.bind(this)}
+          onTagClick={this.handleTagClick}
+          onTagSelect={this.handleTagSelect}
           selectedTags={this.props.selectedTags}
           tagsMap={this.props.results}
         />

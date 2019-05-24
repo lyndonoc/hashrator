@@ -1,5 +1,11 @@
 import { actions } from './actions';
 import { getHashTags } from '../../services/hashtags';
+import { historyOperations } from '../history';
+import {
+  STORAGE_KEYS,
+  getStorage,
+  setStorage,
+} from '../../lib/storage';
 import { toastsOperations } from '../toasts';
 
 const changeSearchIndex = (nextIndex) => (dispatch) => {
@@ -7,6 +13,15 @@ const changeSearchIndex = (nextIndex) => (dispatch) => {
 };
 
 const removeFromSelected = (tag) => (dispatch) => {
+  const existingSelectedTags = getStorage(STORAGE_KEYS.selected) || [];
+  const newSelectedTags = existingSelectedTags.filter((existingTag) => {
+    return existingTag !== tag;
+  });
+
+  setStorage(
+    STORAGE_KEYS.selected,
+    newSelectedTags,
+  );
   dispatch(actions.removeFromSelected(tag));
 };
 
@@ -18,7 +33,7 @@ const searchForHashtags = (term, options = {}) => (dispatch, getState) => {
     ...options,
   };
 
-  if (results.hasOwnProperty(term) && options.type) {
+  if (results.hasOwnProperty(term) && options.type !== 'more') {
     const pageIndex = Object.keys(results).findIndex((result) => result === term);
     return dispatch(actions.changeSearchIndex(pageIndex));
   }
@@ -35,6 +50,10 @@ const searchForHashtags = (term, options = {}) => (dispatch, getState) => {
         }));
         if (!response.isConsecutive) {
           dispatch(actions.changeSearchIndex(Object.keys(results).length));
+          historyOperations.addNewHistory({
+            tag: term,
+            timestamp: Date.now(),
+          })(dispatch);
         }
       } else {
         dispatch(toastsOperations.addNewToast(
@@ -56,6 +75,16 @@ const searchForHashtags = (term, options = {}) => (dispatch, getState) => {
 };
 
 const selectAHashtag = (tag) => (dispatch) => {
+  const existingSelectedTags = getStorage(STORAGE_KEYS.selected) || [];
+  const newSelectedTags = Array.from(new Set([
+    ...existingSelectedTags,
+    tag,
+  ]));
+
+  setStorage(
+    STORAGE_KEYS.selected,
+    newSelectedTags,
+  );
   dispatch(actions.addToSelected(tag));
 };
 

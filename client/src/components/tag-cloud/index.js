@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TransitionGroup from 'react-addons-css-transition-group';
 
+import { Scrollbars } from 'react-custom-scrollbars';
+
 import './tag-cloud.scss';
 
 const TagCloud = ({
@@ -13,44 +15,50 @@ const TagCloud = ({
   selectedTags,
   tags,
 }) => {
-  return (
-    <div className="tag-cloud__container">
-      <TransitionGroup
-        className="tag-cloud"
-        transitionName="tag-cloud__item"
-        transitionEnterTimeout={300}
-        transitionLeaveTimeout={300}
-      >
-        {tags.map((tag, index) => {
-          const isSelected = selectedTags.includes(tag);
-          const classname = classnames('tag-cloud__item', {
-            'tag-cloud__item--selected': isSelected,
-            'tag-cloud__item--hovered': hoverIndex,
-          });
+  const includesSelected = tags.some((tag) => selectedTags.includes(tag));
 
-          return (
-            <span
-              className={classname}
-              key={tag}
-              onMouseOver={onMouseOver && onMouseOver.bind(null, index)}
-            >
-              <i
-                className="material-icons"
-                onClick={onSelect && onSelect.bind(null, tag, isSelected)}
-              >
-                {isSelected ? 'check_circle' : 'fiber_manual_record'}
-              </i>
+  return (
+    <Scrollbars
+      autoHideTimeout={1000}
+    >
+      <div className="tag-cloud__container">
+        <TransitionGroup
+          className="tag-cloud"
+          transitionName="tag-cloud__item"
+          transitionEnterTimeout={300}
+          transitionLeaveTimeout={300}
+        >
+          {tags.map((tag, index) => {
+            const isSelected = selectedTags.includes(tag);
+            const classname = classnames('tag-cloud__item', {
+              'tag-cloud__item--selected': isSelected,
+              'tag-cloud__item--hovered': includesSelected && hoverIndex === index,
+            });
+
+            return (
               <span
-                className="tag-cloud__item__text"
-                onClick={onClick && onClick.bind(null, tag, isSelected)}
+                className={classname}
+                key={tag}
+                onMouseOver={onMouseOver && onMouseOver.bind(null, index)}
               >
-                {tag}
+                <i
+                  className="material-icons"
+                  onClick={onSelect && onSelect.bind(null, tag, isSelected)}
+                >
+                  {isSelected ? 'check_circle' : 'fiber_manual_record'}
+                </i>
+                <span
+                  className="tag-cloud__item__text"
+                  onClick={onClick && onClick.bind(null, tag, isSelected)}
+                >
+                  {tag}
+                </span>
               </span>
-            </span>
-          );
-        })}
-      </TransitionGroup>
-    </div>
+            );
+          })}
+        </TransitionGroup>
+      </div>
+    </Scrollbars>
   );
 };
 

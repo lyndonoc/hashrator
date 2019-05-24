@@ -11,10 +11,13 @@ import { searchOperations } from '../../modules/search';
 import './tag-searcher.scss';
 
 const TagSearcher = ({
+  historyLength,
+  isHistoryPageOpen,
   isLoading,
   isSelectedOpen,
+  onHistoryPageToggle,
   onInputChange,
-  onPageToggle,
+  onSelectedPageToggle,
   onSubmit,
   searchTerm,
   selectedLength,
@@ -26,11 +29,18 @@ const TagSearcher = ({
   return (
     <div className="tag-searcher">
       <i className={iconClassName}>explore</i>
+      {historyLength > 0 && (
+        <Button
+          className="tag-searcher__togglebtn tag-searcher__togglebtn--history"
+          icon="history"
+          onClick={onHistoryPageToggle.bind(null, !isHistoryPageOpen)}
+        />
+      )}
       {selectedLength > 0 && (
         <Button
-          className="tag-searcher__togglebtn"
+          className="tag-searcher__togglebtn tag-searcher__togglebtn--selected"
           icon={isSelectedOpen ? 'folder_open' : 'folder'}
-          onClick={onPageToggle.bind(null, !isSelectedOpen)}
+          onClick={onSelectedPageToggle.bind(null, !isSelectedOpen)}
         >
           <span className="tag-searcher__togglebtn__text">
             {selectedLength}
@@ -69,20 +79,26 @@ const TagSearcher = ({
 };
 
 TagSearcher.propTypes = {
+  historyLength: PropTypes.number,
+  isHistoryPageOpen: PropTypes.bool,
   isLoading: PropTypes.bool,
   isSelectedOpen: PropTypes.bool,
+  onHistoryPageToggle: PropTypes.func,
   onInputChange: PropTypes.func,
-  onPageToggle: PropTypes.func,
+  onSelectedPageToggle: PropTypes.func,
   onSubmit: PropTypes.func,
   searchTerm: PropTypes.string,
   selectedLength: PropTypes.number,
 };
 
 TagSearcher.defaultProps = {
+  historyLength: 0,
+  isHistoryPageOpen: false,
   isLoading: false,
   isSelectedOpen: false,
+  onHistoryPageToggle: () => {},
   onInputChange: () => {},
-  onPageToggle: () => {},
+  onSelectedPageToggle: () => {},
   onSubmit: (event) => event.preventDefault(),
   searchTerm: '',
   selectedLength: 0,
@@ -91,15 +107,23 @@ TagSearcher.defaultProps = {
 class TagSearcherContainer extends Component {
 
   static propTypes = {
+    history: PropTypes.arrayOf(PropTypes.shape({
+      tag: PropTypes.string,
+      timestamp: PropTypes.number,
+    })),
     isLoading: PropTypes.bool,
+    isHistoryPageOpen: PropTypes.bool,
     isSelectedOpen: PropTypes.bool,
     searchForHashtags: PropTypes.func.isRequired,
     selectedTags: PropTypes.arrayOf(PropTypes.string),
+    toggleHistoryPage: PropTypes.func.isRequired,
     toggleSelectedPage: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
+    history: [],
     isLoading: false,
+    isHistoryPageOpen: false,
     isSelectedOpen: false,
     selectedTags: [],
   };
@@ -123,6 +147,7 @@ class TagSearcherContainer extends Component {
 
     if (this.state.searchTerm && !this.props.isLoading) {
       const term = this.state.searchTerm.trim();
+
       this.props.searchForHashtags(term);
       this.setState({
         searchTerm: ''
@@ -134,10 +159,13 @@ class TagSearcherContainer extends Component {
     return (
       <div className="tag-searcher__container">
         <TagSearcher
+          historyLength={this.props.history.length}
+          isHistoryPageOpen={this.props.isHistoryPageOpen}
           isLoading={this.props.isLoading}
           isSelectedOpen={this.props.isSelectedOpen}
+          onHistoryPageToggle={this.props.toggleHistoryPage}
           onInputChange={this.handleInputChange.bind(this)}
-          onPageToggle={this.props.toggleSelectedPage}
+          onSelectedPageToggle={this.props.toggleSelectedPage}
           onSubmit={this.handleFormSubmit.bind(this)}
           searchTerm={this.state.searchTerm}
           selectedLength={this.props.selectedTags.length}
@@ -148,7 +176,9 @@ class TagSearcherContainer extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  history: state.history,
   isLoading: state.search.isLoading,
+  isHistoryPageOpen: state.layout.isHistoryPageOpen,
   isSelectedOpen: state.layout.isSelectedPageOpen,
   selectedTags: state.search.selected,
 });

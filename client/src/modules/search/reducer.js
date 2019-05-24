@@ -1,10 +1,14 @@
+import {
+  STORAGE_KEYS,
+  getStorage,
+} from '../../lib/storage';
 import { types } from './actions';
 
 const initialState = {
   currentIndex: 0,
   isLoading: false,
   results: {},
-  selected: [],
+  selected: getStorage(STORAGE_KEYS.selected) || [],
   size: 50,
 };
 

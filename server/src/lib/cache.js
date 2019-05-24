@@ -6,6 +6,7 @@ const config = require('../config');
 const client = redis.createClient(`redis://${config.REDIS.HOST}`);
 
 module.exports = {
-  set: client.hset.bind(client),
-  get: promisify(client.hget.bind(client)),
+  client,
+  set: promisify(client.set).bind(client),
+  get: promisify(client.get).bind(client),
 };

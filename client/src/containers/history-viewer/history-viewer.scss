@@ -1,0 +1,61 @@
+@import 'main';
+
+.history-viewer {
+  @include flex-box(flex-start, flex-start);
+  background: #fff;
+  border: $gutter / 2 solid #fff;
+  border-bottom-width: $gutter / 3;
+  border-left-width: $gutter / 6;
+  border-right-width: $gutter / 6;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0 10px;
+  height: calc(100% - #{$mobile-top-border-height});
+  width: 100%;
+  &__title {
+    padding: $gutter / 2 0;
+  }
+  &__list {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+    &__item {
+      &:first-child {
+        .history-viewer__list__title {
+          padding-top: 0;
+        }
+      }
+    }
+    &__title {
+      font-size: 16px;
+      font-weight: 600;
+      padding: $gutter / 2 0;
+    }
+    &__history {
+      @include flex-box(space-between);
+      margin: $gutter / 2 0;
+      &__text {
+        padding-left: $gutter / 6;
+        > p {
+          font-weight: 500;
+          &:first-child {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: $gutter / 6;
+          }
+          &:last-child {
+            color: #606060;
+          }
+        }
+      }
+      &__btn {
+        color: #000;
+        padding: $gutter / 6;
+      }
+    }
+  }
+  @media screen and (min-width: $medium-mobile-breakpoint) {
+    height: calc(100% - #{$desktop-top-border-height});
+  }
+}

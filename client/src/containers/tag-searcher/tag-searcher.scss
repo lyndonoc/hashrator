@@ -19,10 +19,15 @@
     }
   }
   &__togglebtn {
-    @include abs-elem(0, 0, auto, auto);
     color: $main-dark-color;
     padding-right: $gutter / 2;
     z-index: $toggle-btn-index;
+    &--history {
+      @include abs-elem(0, auto, auto, 0);
+    }
+    &--selected {
+      @include abs-elem(0, 0, auto, auto);
+    }
     > .material-icons {
       font-size: 32px;
     }
