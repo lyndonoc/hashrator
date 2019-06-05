@@ -32,6 +32,11 @@
       }
     }
   }
+  .tag-cloud {
+    &__item {
+      transition: none !important;
+    }
+  }
   @media screen and (min-width: $medium-mobile-breakpoint) {
     border-bottom-width: $gutter / 2;
     height: calc(100% - #{$desktop-top-border-height});

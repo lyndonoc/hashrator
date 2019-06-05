@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import Button from '../../components/button';
 import SlideContainer from '../../components/slide-container';
 import TagCloud from '../../components/tag-cloud';
-import { searchOperations } from '../../modules/search';
+import { selectionOperations } from '../../modules/selection';
 import { toastsOperations } from '../../modules/toasts';
 
 import './selected-tags.scss';
@@ -113,11 +113,11 @@ class SelectedTagsContainer extends Component {
 const mapStateToProps = (state) => ({
   isOpen: state.layout.isSelectedPageOpen,
   isMobile: state.layout.isMobile,
-  selectedTags: state.search.selected,
+  selectedTags: state.selection.selected,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  ...searchOperations,
+  ...selectionOperations,
   ...toastsOperations,
 }, dispatch);
 

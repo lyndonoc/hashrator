@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import Button from '../../components/button';
 import SlideContainer from '../../components/slide-container';
@@ -22,44 +23,46 @@ const HistoryViewer = ({
       <h3 className="app__title history-viewer__title">
         Search History
       </h3>
-      <div className="history-viewer__list">
-        {Object.keys(history).map((date) => {
-          return (
-            <ul
-              className="history-viewer__list__item"
-              key={date}
-            >
-              <li className="history-viewer__list__title">{date}</li>
-              {history[date].map((item) => {
-                const {
-                  tag,
-                  timestamp
-                } = item;
+      <Scrollbars autoHideTimeout={1000}>
+        <div className="history-viewer__list">
+          {Object.keys(history).map((date) => {
+            return (
+              <ul
+                className="history-viewer__list__item"
+                key={date}
+              >
+                <li className="history-viewer__list__title">{date}</li>
+                {history[date].map((item) => {
+                  const {
+                    tag,
+                    timestamp
+                  } = item;
 
-                return (
-                  <li
-                    className="history-viewer__list__history"
-                    key={timestamp}
-                  >
-                    <div
-                      className="history-viewer__list__history__text"
-                      onClick={onClick.bind(null, item)}
+                  return (
+                    <li
+                      className="history-viewer__list__history"
+                      key={timestamp}
                     >
-                      <p>#{tag}</p>
-                      <p>{moment.unix(timestamp / 1000).format('h:mm A')}</p>
-                    </div>
-                    <Button
-                      className="history-viewer__list__history__btn"
-                      icon="clear"
-                      onClick={onRemove.bind(null, item)}
-                    />
-                  </li>
-                );
-              })}
-            </ul>
-          );
-        })}
-      </div>
+                      <div
+                        className="history-viewer__list__history__text"
+                        onClick={onClick.bind(null, item)}
+                      >
+                        <p>#{tag}</p>
+                        <p>{moment.unix(timestamp / 1000).format('h:mm A')}</p>
+                      </div>
+                      <Button
+                        className="history-viewer__list__history__btn"
+                        icon="clear"
+                        onClick={onRemove.bind(null, item)}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+            );
+          })}
+        </div>
+      </Scrollbars>
     </div>
   );
 };

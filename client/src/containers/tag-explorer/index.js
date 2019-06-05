@@ -10,19 +10,21 @@ import TagCloud from '../../components/tag-cloud';
 import TagSlider from '../../components/tag-slider';
 import { layoutOperations } from '../../modules/layout';
 import { searchOperations } from '../../modules/search';
+import { selectionOperations } from '../../modules/selection';
 
 import './tag-explorer.scss';
 
 const TagExplorer = ({
   currentIndex,
   hoverIndex,
-  selectedTags,
-  tagsMap,
+  lastSelectedMap,
   onLoadMore,
   onMouseOver,
   onNavigate,
   onTagClick,
   onTagSelect,
+  selectedTags,
+  tagsMap,
 }) => {
   const terms = Object.keys(tagsMap);
   const prevIndex = Math.max(0, currentIndex - 1);
@@ -45,6 +47,7 @@ const TagExplorer = ({
           ButtonComponent={Button}
           currentIndex={currentIndex}
           hoverIndex={hoverIndex}
+          lastSelectedMap={lastSelectedMap}
           onLoadMore={onLoadMore}
           onMouseOver={onMouseOver}
           onTagClick={onTagClick}
@@ -69,6 +72,9 @@ const TagExplorer = ({
 TagExplorer.propTypes = {
   currentIndex: PropTypes.number,
   hoverIndex: PropTypes.number,
+  lastSelectedMap: PropTypes.shape({
+    [PropTypes.string]: PropTypes.number,
+  }),
   onLoadMore: PropTypes.func,
   onMouseOver: PropTypes.func,
   onNavigate: PropTypes.func,
@@ -83,6 +89,7 @@ TagExplorer.propTypes = {
 TagExplorer.defaultProps = {
   currentIndex: 0,
   hoverIndex: null,
+  lastSelectedMap: {},
   onLoadMore: () => {},
   onMouseOver: () => {},
   onNavigate: () => {},
@@ -95,16 +102,19 @@ TagExplorer.defaultProps = {
 class TagExplorerContainer extends Component {
 
   static propTypes = {
+    addToSelected: PropTypes.func.isRequired,
     changeSearchIndex: PropTypes.func.isRequired,
     currentIndex: PropTypes.number,
     hoverIndex: PropTypes.number,
     isLoading: PropTypes.bool,
     isMobile: PropTypes.bool,
     isSelectingMultiple: PropTypes.bool,
+    lastSelectedMap: PropTypes.shape({
+      [PropTypes.string]: PropTypes.number,
+    }),
     removeFromSelected: PropTypes.func.isRequired,
     results: PropTypes.object,
     searchForHashtags: PropTypes.func.isRequired,
-    selectAHashtag: PropTypes.func.isRequired,
     selectedTags: PropTypes.arrayOf(PropTypes.string),
     updateHoverIndex: PropTypes.func.isRequired,
   };
@@ -115,12 +125,17 @@ class TagExplorerContainer extends Component {
     isLoading: false,
     isMobile: false,
     isSelectingMultiple: false,
+    lastSelectedMap: {},
     results: {},
     selectedTags: [],
   };
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      isSelectingMultiple: false,
+    };
 
     this.handleLoadMore = this.handleLoadMore.bind(this);
     this.handleTagClick = this.handleTagClick.bind(this);
@@ -150,12 +165,12 @@ class TagExplorerContainer extends Component {
     this.props.searchForHashtags(tag.replace('#', ''));
   }
 
-  handleTagSelect(tag, isSelected) {
+  handleTagSelect(tag, isSelected, index) {
     this.props[
       isSelected
         ? 'removeFromSelected'
-        : 'selectAHashtag'
-    ](tag);
+        : 'addToSelected'
+    ](tag, index);
   }
 
   updateHoverIndex(index) {
@@ -174,8 +189,9 @@ class TagExplorerContainer extends Component {
         <Loader isLoading={this.props.isLoading}/>
         <TagExplorer
           currentIndex={this.props.currentIndex}
-          isSelectingMultiple={this.state.isSelectingMultiple}
           hoverIndex={this.props.hoverIndex}
+          isSelectingMultiple={this.state.isSelectingMultiple}
+          lastSelectedMap={this.props.lastSelectedMap}
           onLoadMore={this.handleLoadMore}
           onMouseOver={this.updateHoverIndex}
           onNavigate={this.props.changeSearchIndex}
@@ -191,17 +207,19 @@ class TagExplorerContainer extends Component {
 
 const mapStateToProps = (state) => ({
   currentIndex: state.search.currentIndex,
-  hoverIndex: state.layout.hoverIndex,
+  hoverIndex: state.selection.hoverIndex,
   isLoading: state.search.isLoading,
   isMobile: state.layout.isMobile,
-  isSelectingMultiple: state.layout.isSelectingMultiple,
+  isSelectingMultiple: state.selection.isSelectingMultiple,
+  lastSelectedMap: state.selection.lastSelectedMap,
   results: state.search.results,
-  selectedTags: state.search.selected,
+  selectedTags: state.selection.selected,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   ...layoutOperations,
   ...searchOperations,
+  ...selectionOperations,
 }, dispatch);
 
 export default connect(

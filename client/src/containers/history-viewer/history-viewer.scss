@@ -16,9 +16,8 @@
     padding: $gutter / 2 0;
   }
   &__list {
-    overflow-x: hidden;
-    overflow-y: scroll;
     height: 100%;
+    padding-right: 5px;
     width: 100%;
     &__item {
       &:first-child {

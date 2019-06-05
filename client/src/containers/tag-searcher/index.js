@@ -180,7 +180,7 @@ const mapStateToProps = (state) => ({
   isLoading: state.search.isLoading,
   isHistoryPageOpen: state.layout.isHistoryPageOpen,
   isSelectedOpen: state.layout.isSelectedPageOpen,
-  selectedTags: state.search.selected,
+  selectedTags: state.selection.selected,
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

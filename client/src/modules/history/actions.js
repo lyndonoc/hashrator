@@ -1,6 +1,6 @@
-const ADD_NEW_HISTORY = 'app/layout/ADD_NEW_HISTORY';
-const CLEAR_HISTORY = 'app/layout/CLEAR_HISTORY';
-const REMOVE_HISTORY = 'app/layout/REMOVE_HISTORY';
+const ADD_NEW_HISTORY = 'app/history/ADD_NEW_HISTORY';
+const CLEAR_HISTORY = 'app/history/CLEAR_HISTORY';
+const REMOVE_HISTORY = 'app/history/REMOVE_HISTORY';
 
 const addNewHistory = (payload) => ({
   type: ADD_NEW_HISTORY,

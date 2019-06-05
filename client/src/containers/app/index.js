@@ -8,7 +8,8 @@ import SelectedTags from '../selected-tags';
 import TagExplorerContainer from '../tag-explorer';
 import TagSearcherContainer from '../tag-searcher';
 import ToastsContainer from '../toasts';
-import { layoutOperations } from '../../modules/layout';
+
+import { selectionOperations } from '../../modules/selection';
 
 import './app.scss';
 
@@ -56,7 +57,7 @@ class AppContainer extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  ...layoutOperations,
+  ...selectionOperations,
 }, dispatch);
 
 export default connect(

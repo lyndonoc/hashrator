@@ -1,40 +1,19 @@
-import {
-  STORAGE_KEYS,
-  getStorage,
-} from '../../lib/storage';
 import { types } from './actions';
 
 const initialState = {
   currentIndex: 0,
   isLoading: false,
   results: {},
-  selected: getStorage(STORAGE_KEYS.selected) || [],
   size: 50,
 };
 
 const searchReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.ADD_TO_SELECTED:
-      return {
-        ...state,
-        selected: Array.from(new Set([
-          ...state.selected,
-          action.payload
-        ])),
-      };
 
     case types.CHANGE_SEARCH_INDEX:
       return {
         ...state,
         currentIndex: action.payload
-      };
-
-    case types.REMOVE_FROM_SELECTED:
-      return {
-        ...state,
-        selected: state
-          .selected
-          .filter((tag) => tag !== action.payload)
       };
 
     case types.SET_SEARCH_RESULTS:

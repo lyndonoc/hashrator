@@ -8,6 +8,7 @@ const TagSlider = ({
   ButtonComponent,
   currentIndex,
   hoverIndex,
+  lastSelectedMap,
   onLoadMore,
   onMouseOver,
   onTagClick,
@@ -17,6 +18,7 @@ const TagSlider = ({
   TagCloudComponent,
 }) => {
   const tags = Object.keys(tagsMap);
+  const lastSelectedIndex = lastSelectedMap[tags[currentIndex]];
 
   return (
     <div className="tag-slider__container">
@@ -29,7 +31,7 @@ const TagSlider = ({
         return (
           <div
             className={classname}
-            key={index}
+            key={tag + index}
           >
             {tags[currentIndex] && (
               <h3 className="tag-slider__title">
@@ -39,6 +41,7 @@ const TagSlider = ({
             <TagCloudComponent
               key={index}
               hoverIndex={hoverIndex}
+              lastSelectedIndex={lastSelectedIndex}
               onClick={onTagClick}
               onMouseOver={onMouseOver}
               onSelect={onTagSelect}
@@ -63,6 +66,9 @@ TagSlider.propTypes = {
   ButtonComponent: PropTypes.func,
   currentIndex: PropTypes.number,
   hoverIndex: PropTypes.number,
+  lastSelectedMap: PropTypes.shape({
+    [PropTypes.string]: PropTypes.number
+  }),
   onLoadMore: PropTypes.func,
   onMouseOver: PropTypes.func,
   onTagClick: PropTypes.func,
@@ -78,6 +84,7 @@ TagSlider.defaultProps = {
   ButtonComponent: () => {},
   currentIndex: 0,
   hoverIndex: null,
+  lastSelectedMap: {},
   onLoadMore: () => {},
   onMouseOver: () => {},
   onTagClick: () => {},

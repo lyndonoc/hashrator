@@ -1,34 +1,21 @@
 import { actions } from './actions';
 import { getHashTags } from '../../services/hashtags';
 import { historyOperations } from '../history';
-import {
-  STORAGE_KEYS,
-  getStorage,
-  setStorage,
-} from '../../lib/storage';
 import { toastsOperations } from '../toasts';
 
 const changeSearchIndex = (nextIndex) => (dispatch) => {
   dispatch(actions.changeSearchIndex(nextIndex));
 };
 
-const removeFromSelected = (tag) => (dispatch) => {
-  const existingSelectedTags = getStorage(STORAGE_KEYS.selected) || [];
-  const newSelectedTags = existingSelectedTags.filter((existingTag) => {
-    return existingTag !== tag;
-  });
-
-  setStorage(
-    STORAGE_KEYS.selected,
-    newSelectedTags,
-  );
-  dispatch(actions.removeFromSelected(tag));
-};
-
 const searchForHashtags = (term, options = {}) => (dispatch, getState) => {
   const {
-    results,
-  } = getState().search;
+    search: {
+      results,
+    },
+    selection: {
+      selected,
+    },
+  } = getState();
   const _options = {
     ...options,
   };
@@ -45,7 +32,7 @@ const searchForHashtags = (term, options = {}) => (dispatch, getState) => {
       if (response.data.length) {
         dispatch(actions.setSearchResults({
           isConsecutive: response.isConsecutive,
-          results: response.data,
+          results: response.data.filter((data) => !selected.includes(data)),
           term,
         }));
         if (!response.isConsecutive) {
@@ -74,20 +61,6 @@ const searchForHashtags = (term, options = {}) => (dispatch, getState) => {
     });
 };
 
-const selectAHashtag = (tag) => (dispatch) => {
-  const existingSelectedTags = getStorage(STORAGE_KEYS.selected) || [];
-  const newSelectedTags = Array.from(new Set([
-    ...existingSelectedTags,
-    tag,
-  ]));
-
-  setStorage(
-    STORAGE_KEYS.selected,
-    newSelectedTags,
-  );
-  dispatch(actions.addToSelected(tag));
-};
-
 const toggleIsSearching = (status) => (dispatch, getState) => {
   const isLoading = typeof status === 'boolean'
     ? status
@@ -97,8 +70,6 @@ const toggleIsSearching = (status) => (dispatch, getState) => {
 
 export default {
   changeSearchIndex,
-  removeFromSelected,
   searchForHashtags,
-  selectAHashtag,
   toggleIsSearching,
 };
