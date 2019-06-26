@@ -1,0 +1,39 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t lyndonoc/hashrator-server -f ./server/Dockerfile ./server
+
+script:
+  - docker run lyndonoc/hashrator-server npm run test
+
+after_success:
+  - docker build -t lyndonoc/hashrator-server -f ./server/Dockerfile ./server
+  - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+  - docker push lyndonoc/hashrator-server
+
+before_deploy:
+  - cd ./client && npm install && npm run build && cd ../
+
+deploy:
+  - provider: s3
+    access_key_id:
+      secure: "$AWS_ACCESS_KEY"
+    secret_access_key:
+      secure: "$AWS_SECRET_KEY"
+    bucket: "hashrator"
+    acl: public_read
+    skip_cleanup: true
+    local_dir: "./client/build"
+    region: us-east-1
+  - provider: elasticbeanstalk
+    access_key_id:
+      secure: "$AWS_ACCESS_KEY"
+    secret_access_key:
+      secure: "$AWS_SECRET_KEY"
+    region: "us-east-1"
+    app: "hashrator"
+    env: "Hashrator-env"
+    bucket_name: "elasticbeanstalk-us-east-1-383455664321"
+    bucket_path: "hashrator"
