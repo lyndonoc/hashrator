@@ -6,7 +6,7 @@ before_install:
   - docker build -t lyndonoc/hashrator-server -f ./server/Dockerfile ./server
 
 script:
-  - docker run lyndonoc/hashrator-server npm run test
+  - docker run --env MOCKED_RESPONSE --env MOCKED_PARSED_DATA --env TAG_SEARCH_MORE_PAYLOAD_SHAPE --env TAG_SEARCH_NODE_SHAPE --env TAG_SEARCH_TOP_PAYLOAD_SHAPE lyndonoc/hashrator-server npm run test
 
 after_success:
   - docker build -t lyndonoc/hashrator-server -f ./server/Dockerfile ./server

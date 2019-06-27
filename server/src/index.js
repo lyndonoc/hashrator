@@ -1,12 +1,9 @@
-const ApiRoute = require('./api');
 const app = require('./app');
 const configs = require('./config');
 const logger = require('./lib/logger');
 
-const App = app(configs.API_ROUTE, ApiRoute);
+logger.info(JSON.stringify(configs, null, 2));
 
-App.listen(configs.PORT, () => {
+app.listen(configs.PORT, () => {
   logger.info(`Listening on ${configs.PORT}`);
 });
-
-module.exports = App;

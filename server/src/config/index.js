@@ -3,9 +3,12 @@ const path = require('path');
 
 dotenv.config({
   allowEmptyValues: true,
-  ...(process.env.NODE_ENV !== 'production' && {
-    path: path.resolve(__dirname, `../../.env.${process.env.NODE_ENV}`),
-  }),
+  path: path.resolve(
+    __dirname,
+    process.env.NODE_ENV !== 'development' || process.env.NODE_ENV !== 'test'
+      ? '../../.env'
+      : `../../.env.${process.env.NODE_ENV}`,
+  ),
 });
 
 const config = {

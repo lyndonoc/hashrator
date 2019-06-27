@@ -1,6 +1,6 @@
 const request = require('supertest');
 
-const app = require('../../');
+const app = require('../../app');
 const cache = require('../../lib/cache');
 const config = require('../../config');
 const helpers = require('../../lib/check-obj-prop');

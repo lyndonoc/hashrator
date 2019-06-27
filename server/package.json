@@ -36,9 +36,9 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "start": "node src",
+    "start:dev": "NODE_ENV=development nodemon src",
     "test": "NODE_ENV=test jest",
-    "test:watch": "NODE_ENV=test jest --watch",
-    "watch": "nodemon src"
+    "test:watch": "NODE_ENV=test jest --watch"
   },
   "jest": {
     "testMatch": [
