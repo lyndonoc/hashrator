@@ -7,9 +7,7 @@ const error = (res, message, code = 500) => {
     return res.status(code).json(message);
   }
 
-  return res
-    .status(code)
-    .send(message.toString());
+  return res.status(code).send(message.toString());
 };
 
 const success = (res, data) => {

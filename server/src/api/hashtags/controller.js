@@ -35,10 +35,14 @@ const getHashTags = async (req, res) => {
 
     const hashtagUrl = getHashTagPage(hashtag);
     const instaPage = await rp.get(hashtagUrl);
-    const tagsMap = mapObjToProps(JSON.parse(instaPage), {
-      [config.TAG_TYPES.TOP]: config.TAG_SEARCH_API.topPayloadShape,
-      [config.TAG_TYPES.MORE]: config.TAG_SEARCH_API.morePayloadShape,
-    });
+    const tagsMap = mapObjToProps(
+      JSON.parse(instaPage),
+      {
+        [config.TAG_TYPES.TOP]: config.TAG_SEARCH_API.topPayloadShape,
+        [config.TAG_TYPES.MORE]: config.TAG_SEARCH_API.morePayloadShape,
+      },
+      checkObjProps,
+    );
     const dataMap = Object.keys(tagsMap).reduce((acc, key) => {
       const rawText = tagsMap[key]
         .map((edge) => {

@@ -1,41 +1,48 @@
 const dotenv = require('dotenv-safe');
+const path = require('path');
 
 dotenv.config({
   allowEmptyValues: true,
+  ...(process.env.NODE_ENV !== 'production' && {
+    path: path.resolve(__dirname, `../../.env.${process.env.NODE_ENV}`),
+  }),
 });
-
-const envVar = process.env;
 
 const config = {
   all: {
-    API_ROUTE: envVar.API_ROUTE || '/api',
+    API_ROUTE: process.env.API_ROUTE || '/api',
+    LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
+    NODE_ENV: process.env.NODE_ENV || 'development',
+    PORT: process.env.PORT || 8000,
     REDIS: {
       EXP: 3600,
-      HOST: envVar.REDIS_HOST,
+      HOST: process.env.REDIS_HOST || 'localhost',
+    },
+    TAG_SEARCH_API: {
+      hostname: process.env.TAG_SEARCH_API_HOSTNAME || 'www.instagram.com',
+      nodeShape:
+        process.env.TAG_SEARCH_NODE_SHAPE &&
+        process.env.TAG_SEARCH_NODE_SHAPE.split(','),
+      morePayloadShape:
+        process.env.TAG_SEARCH_MORE_PAYLOAD_SHAPE &&
+        process.env.TAG_SEARCH_MORE_PAYLOAD_SHAPE.split(','),
+      pathname: process.env.TAG_SEARCH_API_PATHNAME || '/explore/tags',
+      protocol: process.env.TAG_SEARCH_API_PROTOCOL || 'https',
+      topPayloadShape:
+        process.env.TAG_SEARCH_TOP_PAYLOAD_SHAPE &&
+        process.env.TAG_SEARCH_TOP_PAYLOAD_SHAPE.split(','),
     },
     TAG_TYPES: {
       SIZE: 'SIZE',
       MORE: 'MORE',
       TOP: 'TOP',
     },
-    LOG_LEVEL: envVar.LOG_LEVEL || 'debug',
-    NODE_ENV: envVar.NODE_ENV || 'development',
-    TAG_SEARCH_API: {
-      protocol: envVar.TAG_SEARCH_API_PROTOCOL || 'https',
-      hostname: envVar.TAG_SEARCH_API_HOSTNAME || 'www.instagram.com',
-      pathname: envVar.TAG_SEARCH_API_PATHNAME || '/explore/tags',
-      topPayloadShape:
-        envVar.TAG_SEARCH_TOP_PAYLOAD_SHAPE &&
-        envVar.TAG_SEARCH_TOP_PAYLOAD_SHAPE.split(','),
-      morePayloadShape:
-        envVar.TAG_SEARCH_MORE_PAYLOAD_SHAPE &&
-        envVar.TAG_SEARCH_MORE_PAYLOAD_SHAPE.split(','),
-      nodeShape:
-        envVar.TAG_SEARCH_NODE_SHAPE && envVar.TAG_SEARCH_NODE_SHAPE.split(','),
-    },
   },
-  development: {
-    PORT: process.env.PORT || 8000,
+  development: {},
+  production: {},
+  test: {
+    MOCKED_PARSED_DATA: process.env.MOCKED_PARSED_DATA,
+    MOCKED_RESPONSE: process.env.MOCKED_RESPONSE,
   },
 };
 

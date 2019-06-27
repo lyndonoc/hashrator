@@ -11,11 +11,11 @@ const checkObjProps = (obj = {}, props = []) => {
   return target;
 };
 
-const mapObjToProps = (obj = {}, mappings = {}) => {
+const mapObjToProps = (obj = {}, mappings = {}, mapper = checkObjProps) => {
   return Object.keys(mappings).reduce(
     (acc, value) => ({
       ...acc,
-      [value]: checkObjProps(obj, mappings[value]),
+      [value]: mapper(obj, mappings[value]),
     }),
     {},
   );

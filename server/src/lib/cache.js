@@ -1,4 +1,4 @@
-const redis = require('redis');
+const redis = require(process.env.NODE_ENV !== 'test' ? 'redis' : 'redis-mock');
 const { promisify } = require('util');
 
 const config = require('../config');
