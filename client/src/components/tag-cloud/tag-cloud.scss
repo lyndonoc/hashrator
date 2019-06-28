@@ -37,20 +37,12 @@
       }
     }
     &--hovered {
-      background: red;
-      color: #000000;
+      background: #4da4ff;
+      color: #ffffff;
     }
   }
   @media screen and (min-width: $small-desktop-breakpoint) {
     &__item {
-      //&:hover {
-      //  background: $main-dark-blue-color;
-      //  color: #fff;
-      //}
-      &--hovered {
-        background: red;
-        color: #000000;
-      }
       &__text {
         &:hover {
           text-decoration: underline;

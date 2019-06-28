@@ -5,7 +5,7 @@ dotenv.config({
   allowEmptyValues: true,
   path: path.resolve(
     __dirname,
-    process.env.NODE_ENV !== 'development' || process.env.NODE_ENV !== 'test'
+    process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'test'
       ? '../../.env'
       : `../../.env.${process.env.NODE_ENV}`,
   ),

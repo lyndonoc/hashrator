@@ -21,7 +21,7 @@ const getHashTags = async (req, res) => {
 
   try {
     const tagType = config.TAG_TYPES[type.toUpperCase()];
-    const cachedTags = await cacheClient.get(hashtag);
+    const cachedTags = await cacheClient.getData(hashtag);
 
     if (cachedTags) {
       const cachedResults = JSON.parse(cachedTags);
@@ -66,7 +66,16 @@ const getHashTags = async (req, res) => {
       0,
     );
 
-    cacheClient.set(
+    success(res, {
+      data:
+        size && start
+          ? dataMap[tagType].slice(start, start + size)
+          : dataMap[tagType],
+      isConsecutive: tagType === config.TAG_TYPES.MORE,
+      totalSize,
+    });
+
+    cacheClient.setData(
       hashtag,
       JSON.stringify({
         ...dataMap,
@@ -75,18 +84,7 @@ const getHashTags = async (req, res) => {
           0,
         ),
       }),
-      'EX',
-      config.REDIS.EXP,
     );
-
-    return success(res, {
-      data:
-        size && start
-          ? dataMap[tagType].slice(start, start + size)
-          : dataMap[tagType],
-      isConsecutive: tagType === config.TAG_TYPES.MORE,
-      totalSize,
-    });
   } catch (err) {
     console.error(err);
     return success(res, {

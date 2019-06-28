@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "concurrently 'cd server && rm -rf node_modules && npm i' 'cd client && rm -rf node_modules && npm i'",
-    "start": "concurrently 'cd server && npm run watch' 'cd client && npm start'",
+    "clean": "concurrently 'cd client && rm -rf node_modules && npm i' 'cd server && rm -rf node_modules && npm i'",
+    "start": "concurrently 'cd client && npm start' 'cd server && npm run start:dev'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
