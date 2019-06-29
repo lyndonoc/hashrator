@@ -1,13 +1,33 @@
 {
-  "AWSEBDockerrunVersion": "1",
-  "Image": {
-    "Name": "lyndonoc/hashrator-server",
-    "Update": "true"
-  },
-  "Ports": [
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
     {
-      "ContainerPort": 8000
+      "name": "client",
+      "image": "lyndonoc/hashrator-client",
+      "hostname": "client",
+      "essential": false,
+      "memory": 128
+    },
+    {
+      "name": "server",
+      "image": "lyndonoc/hashrator-server",
+      "hostname": "api",
+      "essential": false,
+      "memory": 128
+    },
+    {
+      "name": "nginx",
+      "image": "lyndonoc/hashrator-nginx",
+      "hostname": "nginx",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": ["client", "server"],
+      "memory": 128
     }
-  ],
-  "Volumes": []
+  ]
 }

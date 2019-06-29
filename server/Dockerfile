@@ -11,7 +11,7 @@ FROM node:10-alpine
 WORKDIR /app
 COPY --from=base /app /app
 
-ENV PORT 8000
-EXPOSE 8000
+ENV PORT 4000
+EXPOSE 4000
 
 CMD ["npm", "start"]
