@@ -58,6 +58,7 @@
     &__input {
       border: none;
       border-bottom: 1px solid $main-dark-color;
+      border-radius: 0;
       font-size: 12px;
       padding: $gutter / 6 ;
       width: 75%;

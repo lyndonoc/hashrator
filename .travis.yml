@@ -17,7 +17,6 @@ after_success:
   - docker push lyndonoc/hashrator-nginx
   - docker push lyndonoc/hashrator-server
 
-
 deploy:
   - provider: elasticbeanstalk
     access_key_id:
