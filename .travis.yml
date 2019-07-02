@@ -5,6 +5,9 @@ services:
 before_install:
   - docker build -t lyndonoc/hashrator-server -f ./server/Dockerfile ./server
 
+install:
+  - npm install -g travis-ci-cloudfront-invalidation
+
 script:
   - docker run --env MOCKED_RESPONSE --env MOCKED_PARSED_DATA --env TAG_SEARCH_MORE_PAYLOAD_SHAPE --env TAG_SEARCH_NODE_SHAPE --env TAG_SEARCH_TOP_PAYLOAD_SHAPE lyndonoc/hashrator-server npm run test
 
@@ -37,3 +40,6 @@ deploy:
     env: "Hashrator-env-2"
     bucket_name: "elasticbeanstalk-us-east-1-383455664321"
     bucket_path: "hashrator"
+
+after_deploy:
+  - travis-ci-cloudfront-invalidation -a $AWS_ACCESS_KEY -s $AWS_SECRET_KEY -c $AWS_CLOUDFRONT_DIST_ID -i '/*' -b $TRAVIS_BRANCH -p $TRAVIS_PULL_REQUEST
