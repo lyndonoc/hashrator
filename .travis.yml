@@ -37,7 +37,7 @@ deploy:
       secure: "$AWS_SECRET_KEY"
     region: "us-east-1"
     app: "hashrator"
-    env: "Hashrator-env-2"
+    env: "Hashrator-env"
     bucket_name: "elasticbeanstalk-us-east-1-383455664321"
     bucket_path: "hashrator"
 
