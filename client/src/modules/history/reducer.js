@@ -4,7 +4,7 @@ import {
 } from '../../lib/storage';
 import { types } from './actions';
 
-const initialState = getStorage(STORAGE_KEYS.history) || [];
+export const initialState = getStorage(STORAGE_KEYS.history) || [];
 
 const historyReducer = (state = initialState, action) => {
   switch (action.type) {

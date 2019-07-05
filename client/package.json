@@ -120,7 +120,8 @@
       "web.jsx",
       "jsx",
       "node"
-    ]
+    ],
+    "setupTestFrameworkScriptFile": "<rootDir>/src/setupTests.js"
   },
   "babel": {
     "presets": [
@@ -128,6 +129,9 @@
     ]
   },
   "devDependencies": {
+    "check-prop-types": "^1.1.2",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
     "eslint": "^5.6.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",

@@ -5,11 +5,12 @@ import {
 } from 'redux';
 import thunk from 'redux-thunk';
 
+export const middlewares = [
+  thunk,
+];
+
 export const createNewStore = (rootReducer = {}) => {
   const enhancers = [];
-  const middleware = [
-    thunk,
-  ];
 
   if (process.env.NODE_ENV === 'development') {
     const devToolsExtension = window.__REDUX_DEVTOOLS_EXTENSION__;
@@ -20,7 +21,7 @@ export const createNewStore = (rootReducer = {}) => {
   }
 
   const composedEnhancers = compose(
-    applyMiddleware(...middleware),
+    applyMiddleware(...middlewares),
     ...enhancers
   );
 
